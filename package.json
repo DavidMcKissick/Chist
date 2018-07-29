@@ -1,6 +1,6 @@
 {
   "name": "chist",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A simple to-do app for skybrook use",
   "main": "gulpfile.js",
   "scripts": {
@@ -11,5 +11,16 @@
     "url": "https://gitlab.com/Skybrook-foundation/Nojave/Chist.git"
   },
   "author": "David McKissick, Nojave",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "browser-sync": "^2.24.6",
+    "browsersync": "0.0.1-security",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-eslint": "^5.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemap": "^1.0.1"
+  }
 }
