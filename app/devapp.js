@@ -1,13 +1,11 @@
-//TODO: Figure out how to delete notes from the local array. 
-//      Consider switching from array to individual local key-value pairs
-
+//TODO: Figure out organizing and rendering by date
+var numeric;
 let model = {
-	version: '0.0.4',
-	notes: ['Imma placeholder! Hooray!'],
-	users: [],
+	version: '0.0.8',
 	placeholders: ['Pick up milk...', 'Tell John Doe...', 'Make Jane a...', 'Read...', 'Turn in the...']
 };
 //Fear my overmodularized coooooooooooooooooode mwauhahahahaha
+//The above comment was actually relevant at one point. This is vaguely spaghetty tbah.. But regardless, I'm proud of my work.
 let controller = {  
 	noteObj: {
 		content: '',
@@ -69,26 +67,25 @@ let controller = {
 		let hr = document.createElement('hr');
 		newDiv.id = 'note';
 		let noteText = document.createElement('p');
-		noteText.textContent = content;
-		controller.delGen(newDiv);
+		noteText.textContent = localStorage.getItem(content);
 		newDiv.appendChild(noteText);
+		controller.delGen(newDiv, content);
 		master.appendChild(newDiv);
 		newDiv.appendChild(hr);
 	},
 	saveNote: function(content){
-		model.notes.push(content);
+		localStorage.setItem((localStorage.length + 1) + content, content);
+		numeric = (localStorage.length) + content;
+		
 	},
 	loadNotes: function(){
-		if(model.notes.length <= 0){
-			// console.log('done');
+		if(localStorage.length <= 0){
+			return null;
 		} else {
-			for(let i = 0; i < model.notes.length; i++){
-				controller.generateNote(model.notes[i]);
+			for(let i = 0; i < localStorage.length; i++){
+				controller.generateNote(localStorage.key(i));
 			}
 		}
-	},
-	localSave: function(){
-		localStorage.setItem('notes', JSON.stringify(model.notes));
 	},
 	localLoad: function(){
 		let notes = JSON.parse(localStorage.getItem('notes'));
@@ -97,12 +94,13 @@ let controller = {
 	localRemove: function(){
 		localStorage.removeItem(0);
 	},
-	delGen: function(parent){
+	delGen: function(parent, local){
 		let delButton = document.createElement('button');
 		delButton.textContent = 'delete';
 		delButton.class = 'deleteButton';
 		delButton.addEventListener('click', function () {
 			parent.remove();
+			localStorage.removeItem(local);
 		});
 		parent.appendChild(delButton);
 	}
@@ -113,10 +111,9 @@ let view = {
 		target.addEventListener('keydown', function (e){
 			if(13 == e.keyCode){
 				let note = target.value;
-				controller.generateNote(note);
 				controller.saveNote(note);
-				controller.localSave();
-				target.placeholder = controller.randomPlaceholder();
+				controller.generateNote(numeric); //Numeric will be returned by saveNote
+				target.placeholder = controller.randomPlaceholder() + '(enter)';
 				target.value = '';
 			}
 		});
